@@ -5,7 +5,6 @@
 
 
 
-
 <head>
     <link rel="icon" type="image/png" href="https://yt3.googleusercontent.com/Ki7nPuE744r5TVkDdIeBHvMyN5gCnZwpoTnw6LWysB5hIS_nwfPCaVwxjFZglaqFHmwXhep2rw=s160-c-k-c0x00ffffff-no-rj">
 
@@ -254,7 +253,10 @@
         <button style="background-color: #165900; color: white;" class="material-button" onclick="selectedElement = 'nuke';">Nuke</button>
         <button style="background-color: #BFBFBF" class="material-button" onclick="selectedElement = 'aluminum';">Aluminum</button>
         <button style="background-color: #959595" class="material-button" onclick="selectedElement = 'gravel';">Gravel</button>
-        <button class="material-button" onclick="selectedElement = 'empty';">None</button>
+        <button style="background-color: #801700; color: white;" class="material-button" onclick="selectedElement = 'redlightoff';">Red Light</button>
+        <button style="background-color: #444a60; color: white;" class="material-button" onclick="selectedElement = 'wire';">Wire</button>
+        <button style="background-color: #fffb00" class="material-button" onclick="selectedElement = 'electricshock';">Eletric Shock</button>
+             <button class="material-button" onclick="selectedElement = 'empty';">None</button>
         <p>Brush size: <input type="range" id="brushSize"min="1"max="30" value="1"></p>
         <button id="pauseButton"></button> 
        
@@ -1069,6 +1071,31 @@ document.getElementById('loadButton').addEventListener('click', openLoadMenu);
             color: '#959595',
             type: 'solid',
             density: 1.2
+        },
+        redlightoff:{
+            color:'#801700',
+            type: 'solid',
+            density: 1
+        },
+        redlighton:{
+            color:'#ff3c3c',
+            type: 'solid',
+            density: 1
+        },
+        wire:{
+            color: '#444a60',
+            type: 'solid',
+            density: 0.7
+        },
+        ewire:{
+            color: '#444a60',
+            type: 'solid',
+            density: 0.7
+        },
+        electricshock:{
+            color:'#fffb00',
+            type: 'gas',
+            density: 0
         }
     
            
@@ -5611,6 +5638,7 @@ document.getElementById('loadButton').addEventListener('click', openLoadMenu);
      }
     
  }
+ 
  if(cell.element==='gallium'){
         const adjacentCells = [{
                                 row: row - 1,
@@ -6628,6 +6656,295 @@ document.getElementById('loadButton').addEventListener('click', openLoadMenu);
                         } else cell.brickColor = '#D12A2A';
    
  }
+ if (cell.element === 'wire') {
+     
+     const adjacentCells = [{
+                                row: row + 1,
+                                col: col
+                            }, // Down
+                            {
+                                row: row - 1,
+                                col: col
+                            }, // Up
+                            {
+                                row: row,
+                                col: col - 1
+                            }, // Left
+                            {
+                                row: row,
+                                col: col + 1
+                            } // Right
+                        ];
+                        // Check for adjacent water
+                        const Adjacent = adjacentCells.some(({
+                                row: r,
+                                col: c
+                            }) =>
+                            grid[r] && grid[r][c] && grid[r][c].element === 'electricshock' 
+                        );
+                        // Transform dark lava into stone if adjacent to water
+                        if (Adjacent) {
+                           cell.element='ewire'
+                           cell.age=0;
+                        } 
+   
+ }
+ if (cell.element === 'wire') {
+     
+     const adjacentCells = [{
+                                row: row + 1,
+                                col: col
+                            }, // Down
+                            {
+                                row: row - 1,
+                                col: col
+                            }, // Up
+                            {
+                                row: row,
+                                col: col - 1
+                            }, // Left
+                            {
+                                row: row,
+                                col: col + 1
+                            } // Right
+                        ];
+                        // Check for adjacent water
+                        const Adjacent = adjacentCells.some(({
+                                row: r,
+                                col: c
+                            }) =>
+                            grid[r] && grid[r][c] && grid[r][c].element === 'ewire'
+                        );
+                        // Transform dark lava into stone if adjacent to water
+                        if (Adjacent) {
+                            cell.age++;
+                            if(cell.age>=1){
+                           cell.element='ewire'
+                           cell.age=0;
+                            }
+                        } 
+   
+ }
+ 
+ if (cell.element === 'ewire') {
+     
+     const adjacentCells = [{
+                                row: row + 1,
+                                col: col
+                            }, // Down
+                            {
+                                row: row - 1,
+                                col: col
+                            }, // Up
+                            {
+                                row: row,
+                                col: col - 1
+                            }, // Left
+                            {
+                                row: row,
+                                col: col + 1
+                            } // Right
+                        ];
+                        // Check for adjacent water
+                        const Adjacent = adjacentCells.some(({
+                                row: r,
+                                col: c
+                            }) =>
+                            grid[r] && grid[r][c] && grid[r][c].element === 'electricshock'
+                        );
+                        // Transform dark lava into stone if adjacent to water
+                        if (Adjacent) {
+                          
+                           cell.age=0;
+                        } 
+   
+ }
+ 
+ if (cell.element === 'redlightoff') {
+     
+     const adjacentCells = [{
+                                row: row + 1,
+                                col: col
+                            }, // Down
+                            {
+                                row: row - 1,
+                                col: col
+                            }, // Up
+                            {
+                                row: row,
+                                col: col - 1
+                            }, // Left
+                            {
+                                row: row,
+                                col: col + 1
+                            } // Right
+                        ];
+                        // Check for adjacent water
+                        const Adjacent = adjacentCells.some(({
+                                row: r,
+                                col: c
+                            }) =>
+                            grid[r] && grid[r][c] && grid[r][c].element === 'electricshock'
+                        );
+                        // Transform dark lava into stone if adjacent to water
+                        if (Adjacent) {
+                          cell.element='redlighton'
+                           cell.age=0;
+                        } 
+   
+ }
+ if (cell.element === 'redlightoff') {
+     
+     const adjacentCells = [{
+                                row: row + 1,
+                                col: col
+                            }, // Down
+                            {
+                                row: row - 1,
+                                col: col
+                            }, // Up
+                            {
+                                row: row,
+                                col: col - 1
+                            }, // Left
+                            {
+                                row: row,
+                                col: col + 1
+                            } // Right
+                        ];
+                        // Check for adjacent water
+                        const Adjacent = adjacentCells.some(({
+                                row: r,
+                                col: c
+                            }) =>
+                            grid[r] && grid[r][c] && grid[r][c].element === 'ewire'
+                        );
+                        // Transform dark lava into stone if adjacent to water
+                        if (Adjacent) {
+                          cell.element='redlighton'
+                           cell.age=0;
+                        } 
+   
+ }
+ if (cell.element === 'redlighton') {
+     
+     const adjacentCells = [{
+                                row: row + 1,
+                                col: col
+                            }, // Down
+                            {
+                                row: row - 1,
+                                col: col
+                            }, // Up
+                            {
+                                row: row,
+                                col: col - 1
+                            }, // Left
+                            {
+                                row: row,
+                                col: col + 1
+                            } // Right
+                        ];
+                        // Check for adjacent water
+                        const Adjacent = adjacentCells.some(({
+                                row: r,
+                                col: c
+                            }) =>
+                            grid[r] && grid[r][c] && grid[r][c].element === 'ewire'
+                        );
+                        // Transform dark lava into stone if adjacent to water
+                        if (Adjacent) {
+                          
+                           cell.age=0;
+                        } 
+   
+ }
+ if (cell.element === 'redlighton') {
+     
+     const adjacentCells = [{
+                                row: row + 1,
+                                col: col
+                            }, // Down
+                            {
+                                row: row - 1,
+                                col: col
+                            }, // Up
+                            {
+                                row: row,
+                                col: col - 1
+                            }, // Left
+                            {
+                                row: row,
+                                col: col + 1
+                            } // Right
+                        ];
+                        // Check for adjacent water
+                        const Adjacent = adjacentCells.some(({
+                                row: r,
+                                col: c
+                            }) =>
+                            grid[r] && grid[r][c] && grid[r][c].element === 'electricshock'
+                        );
+                        // Transform dark lava into stone if adjacent to water
+                        if (Adjacent) {
+                          
+                           cell.age=0;
+                        } 
+   
+ }
+ if (cell.element === 'redlightoff') {
+     
+     const adjacentCells = [{
+                                row: row + 1,
+                                col: col
+                            }, // Down
+                            {
+                                row: row - 1,
+                                col: col
+                            }, // Up
+                            {
+                                row: row,
+                                col: col - 1
+                            }, // Left
+                            {
+                                row: row,
+                                col: col + 1
+                            } // Right
+                        ];
+                        // Check for adjacent water
+                        const Adjacent = adjacentCells.some(({
+                                row: r,
+                                col: c
+                            }) =>
+                            grid[r] && grid[r][c] && grid[r][c].element === 'redlighton'
+                        );
+                        // Transform dark lava into stone if adjacent to water
+                        if (Adjacent) {
+                          cell.element='redlighton'
+                           cell.age=0;
+                        } 
+   
+ }
+ 
+ if(cell.element==='ewire'){
+    cell.age++;
+    if(cell.age>=10){
+        cell.element='wire';
+    }
+ }
+ if(cell.element==='electricshock'){
+    cell.age++;
+    if(cell.age>=5){
+        cell.element='empty';
+    }
+ }
+ if(cell.element==='redlighton'){
+    cell.age++;
+    if(cell.age>=5){
+        cell.element='redlightoff';
+    }
+ }
+ 
              
                     // Update Lava Cooling Process
                     if (cell.element === 'lava') {
